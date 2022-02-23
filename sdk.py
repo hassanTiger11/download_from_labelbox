@@ -11,6 +11,6 @@ project = lb.get_project('ckz5pxc9r6fc70z97a35hc3f6')
 # Export image and text data as an annotation generator:
 labels = project.label_generator()
 # Export video annotations as an annotation generator:
-labels = project.video_label_generator()
+#labels = project.video_label_generator()
 # Export labels created in the selected date range as a json file:
-labels = project.export_labels(download = True, start="2022-02-11", end="2022-02-17")
+labels = project.export_labels(download = True, start="2022-01-24", end="2022-02-17")

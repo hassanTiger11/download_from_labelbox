@@ -39,12 +39,14 @@ def fetch_data(img_url=IMG_URL, img_path=IMG_PATH, filename="", f_log=None):
 def fetch_overhead():
     processed_log = open('fetched_log.json', 'r+')
     p_log = json.load(processed_log)
-    return p_log
+    json_file = open('export-2022-02-17T22_28_55.731Z.json')
+    json_objs = json.load(json_file)
+    return p_log, json_objs
 
-json_file = open('labels.json')
-json_objs = json.load(json_file)
+
+
 def main():  
-    f_log = fetch_overhead()
+    f_log, json_objs = fetch_overhead()
     for index, obj in enumerate(json_objs):
         fetch_data(img_url=obj['Labeled Data'], img_path=IMG_PATH, filename=f'{obj["ID"]}', f_log=f_log)
 

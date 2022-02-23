@@ -12,7 +12,7 @@ def get_obj_str(i, obj=json_objs):
     return formatted
 
 def process_overhead():
-    json_file = open('labels.json')
+    json_file = open('export-2022-02-17T22_28_55.731Z.json')
     json_objs = json.load(json_file)
     processed_log = open('processed_log.json', 'r+')
     p_log = json.load(processed_log)
@@ -76,12 +76,15 @@ def process_all():
     for index, obj in enumerate(json_objs):
         process(index, p_log=p_log)
     
-def main():
+def not_processed():
     not_processed = open('not_processed', 'r+')
     p_log, json_objs = process_overhead()
     np_json = json.load(not_processed)
     for id in np_json:
         process_by_id(ID=id, p_log=p_log, json_objs=json_objs)
-        
+
+def main():
+    process_all()
+
 if __name__ == '__main__':
     main()
