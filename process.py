@@ -58,11 +58,24 @@ def process(i, p_log):
     p_log.append(f'{obj["ID"]}.jpg' )
     json.dump(p_log, open('processed_log.json', 'w+'), indent=2)
     
-    #remove all sides but the box
-def main():
+def process_by_id(ID = ""):
+    if(ID == ""): return
+    p_log = process_overhead()  
+    for index, obj in enumerate(json_objs):
+        if(f'{obj["ID"]}.jpg' == ID):
+            print(f'process by id: processing {ID}')
+            process(index, p_log=p_log)
+
+def process_all():
     p_log = process_overhead()  
     for index, obj in enumerate(json_objs):
         process(index, p_log=p_log)
+    
+def main():
+    not_processed = open('not_processed', 'r+')
+    np_json = json.load(not_processed)
+    for id in np_json:
+        process_by_id(ID=id)
         
 if __name__ == '__main__':
     main()
