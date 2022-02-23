@@ -13,6 +13,8 @@ IMG_PATH = os.path.join('datasets', 'plant_images')
 IMG_URL = 'https://storage.labelbox.com/ck7m5ekexxhad0868og6eqhqr%2F6c0c1d63-d05a-59c3-221b-62cf1c215259-78ac8a19-e76a-42af-9983-b47cc0de8832_rawData0046.png?Expires=1646346539574&KeyName=labelbox-assets-key-3&Signature=zXUR3KN7R73n6BlLQ3j6i9H-VPI'
 
 PROCESSED_PATH = os.path.join('datasets', 'processed')
+EDGE_PLANT = os.path.join(PROCESSED_PATH, "edge_plant")
+WHOLE_PLANT = os.path.join(PROCESSED_PATH, "whole_plant")
 def push_data(img_id= '', img_path=PROCESSED_PATH, img_obj=None, count=0):
     os.makedirs(img_path, exist_ok=True)
     save_path = os.path.join(img_path, f'{img_id}_{count}.jpg')
@@ -21,13 +23,18 @@ def push_data(img_id= '', img_path=PROCESSED_PATH, img_obj=None, count=0):
 
 
 def fetch_data(img_url=IMG_URL, img_path=IMG_PATH, filename=""):
+    print(f'--------------fetch images------------')
     filename+='.jpg' #concat extension
     os.makedirs(img_path, exist_ok=True)
     img_name = os.path.join(IMG_PATH, filename)
+    print(f'fetching: {img_name}')
+    if(os.path.exists(img_name)): 
+        print(f'already exist: {img_name}')
+        return
     urllib.request.urlretrieve(img_url, img_name)
 
 json_file = open('labels.json')
-json_objs = json.load(json_file)  
-for index, obj in enumerate(json_objs):
-    
-    fetch_data(img_url=obj['Labeled Data'], img_path=IMG_PATH, filename=f'{obj["ID"]}.jpg')
+json_objs = json.load(json_file)
+def fetch_all():  
+    for index, obj in enumerate(json_objs):
+        fetch_data(img_url=obj['Labeled Data'], img_path=IMG_PATH, filename=f'{obj["ID"]}')
