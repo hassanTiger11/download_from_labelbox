@@ -34,8 +34,7 @@ def process(i, p_log={}, json_objs={}):
     img = cv2.imread(abs_img_path)
     if (not type(img) is np.ndarray):
         print("cv2: couldn't find image")
-        return
-    
+        return 
     if(obj["Label"] == {}):
         print(f'processes: {obj["ID"]} has no labels; moving next')
         return
