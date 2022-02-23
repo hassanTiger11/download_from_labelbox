@@ -36,6 +36,10 @@ def process(i, p_log={}, json_objs={}):
         print("cv2: couldn't find image")
         return
     
+    if(obj["Label"] == {}):
+        print(f'processes: {obj["ID"]} has no labels; moving next')
+        return
+    
     labels = obj["Label"]["objects"]
     #dimenstions of mask
     for index, label in enumerate(labels):
