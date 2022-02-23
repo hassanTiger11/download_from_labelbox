@@ -3,8 +3,7 @@ from fetch_data import *
 import numpy as np
 import cv2
 import sys
-json_file = open('labels.json')
-json_objs = json.load(json_file)
+
 
 
 def get_obj_str(i, obj=json_objs):
@@ -13,11 +12,13 @@ def get_obj_str(i, obj=json_objs):
     return formatted
 
 def process_overhead():
+    json_file = open('labels.json')
+    json_objs = json.load(json_file)
     processed_log = open('processed_log.json', 'r+')
     p_log = json.load(processed_log)
-    return p_log
+    return p_log, json_objs
 
-def process(i, p_log):
+def process(i, p_log={}, json_objs={}):
     print(f'--------------Processes images------------')
     
 
@@ -58,24 +59,25 @@ def process(i, p_log):
     p_log.append(f'{obj["ID"]}.jpg' )
     json.dump(p_log, open('processed_log.json', 'w+'), indent=2)
     
-def process_by_id(ID = ""):
+def process_by_id(ID = "", p_log={}, json_objs={}):
     if(ID == ""): return
-    p_log = process_overhead()  
+    p_log, json_objs = process_overhead()  
     for index, obj in enumerate(json_objs):
         if(f'{obj["ID"]}.jpg' == ID):
             print(f'process by id: processing {ID}')
-            process(index, p_log=p_log)
+            process(index, p_log=p_log, json_objs=json_objs)
 
 def process_all():
-    p_log = process_overhead()  
+    p_log, json_objs = process_overhead()  
     for index, obj in enumerate(json_objs):
         process(index, p_log=p_log)
     
 def main():
     not_processed = open('not_processed', 'r+')
+    p_log, json_objs = process_overhead()
     np_json = json.load(not_processed)
     for id in np_json:
-        process_by_id(ID=id)
+        process_by_id(ID=id, p_log=p_log, json_objs=json_objs)
         
 if __name__ == '__main__':
     main()
