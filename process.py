@@ -35,7 +35,7 @@ def process(i, p_log={}, json_objs={}):
     if (not type(img) is np.ndarray):
         print("cv2: couldn't find image")
         return
-    
+    print(f'label: {obj["Label"]}') 
     labels = obj["Label"]["objects"]
     #dimenstions of mask
     for index, label in enumerate(labels):
@@ -76,6 +76,7 @@ def main():
     not_processed = open('not_processed', 'r+')
     p_log, json_objs = process_overhead()
     np_json = json.load(not_processed)
+    print(f'{json.dumps(json_objs, indent = 2)}')
     for id in np_json:
         process_by_id(ID=id, p_log=p_log, json_objs=json_objs)
         
