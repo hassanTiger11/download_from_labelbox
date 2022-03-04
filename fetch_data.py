@@ -15,6 +15,7 @@ IMG_URL = 'https://storage.labelbox.com/ck7m5ekexxhad0868og6eqhqr%2F6c0c1d63-d05
 PROCESSED_PATH = os.path.join('datasets', 'processed')
 EDGE_PLANT = os.path.join(PROCESSED_PATH, "edge_plant")
 WHOLE_PLANT = os.path.join(PROCESSED_PATH, "whole_plant")
+
 def push_data(img_id= '', img_path=PROCESSED_PATH, img_obj=None, count=0):
     os.makedirs(img_path, exist_ok=True)
     save_path = os.path.join(img_path, f'{img_id}_{count}.jpg')

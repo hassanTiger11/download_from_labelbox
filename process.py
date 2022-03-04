@@ -1,3 +1,10 @@
+'''
+Author: Hassan Alnamer
+This is a tool that helps download images from labelbox by and using their associated labels to create
+filtered images using opencv
+
+The tool expects a Json file downloaded from labebox
+'''
 import json
 from fetch_data import *
 import numpy as np
@@ -19,6 +26,10 @@ def process_overhead():
     return p_log, json_objs
 
 def process(i, p_log={}, json_objs={}):
+    '''
+    This function processes an takes an image from the downoladed set,
+    Mask it then put it in its designated folder/label
+    '''
     print(f'--------------Processes images------------')
     
 
