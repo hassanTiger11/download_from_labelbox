@@ -13,30 +13,32 @@ import sys
 
 
 
-def get_obj_str(i, obj=json_objs):
-    formatted = json.dumps(obj[i], indent=2)
-    #print(formatted)
-    return formatted
+
 
 def process_overhead():
-    json_file = open('export-2022-02-17T22_28_55.731Z.json')
+    json_file = open('labels.json')
     json_objs = json.load(json_file)
     processed_log = open('processed_log.json', 'r+')
     p_log = json.load(processed_log)
-    return p_log, json_objs
+    fetched_log = open('fetched_log.json', 'r+')
+    f_log = json.load(fetched_log)
+    return p_log, f_log, json_objs
 
-def process(i, p_log={}, json_objs={}):
+def process(obj, p_log={}, f_log={}):
     '''
     This function processes an takes an image from the downoladed set,
     Mask it then put it in its designated folder/label
     '''
     print(f'--------------Processes images------------')
     
-
-    obj = json_objs[i]
+    
     
     if(f'{obj["ID"]}.jpg' in p_log):
         print(f'Process: already processed {obj["ID"]}.jpg')
+        return 
+
+    if(f'{obj["ID"]}.jpg' not in f_log):
+        print(f'Process: Havent downloaded {obj["ID"]}.jpg yet!')
         return 
 
     img_path = os.path.join(IMG_PATH, f'{obj["ID"]}.jpg')
@@ -63,17 +65,14 @@ def process(i, p_log={}, json_objs={}):
         cv2.rectangle(mask, (left, top), (left+width, top+height), 255, -1)
         masked = cv2.bitwise_and(img, img, mask=mask)
         #save this file 
-        if(value == "whole_plant"):
-            push_data(img_id= obj["ID"], img_path=WHOLE_PLANT, img_obj=masked, count=index)
-        elif(value == "edge_plant"):
-            push_data(img_id= obj["ID"], img_path=EDGE_PLANT, img_obj=masked, count=index)
-        else:
-            push_data(img_id= obj["ID"], img_path=PROCESSED_PATH, img_obj=masked, count=index)
+        PATH_WITH_LABEL = os.path.join(PROCESSED_PATH, value)
+        push_data(img_id= obj["ID"], img_path=PATH_WITH_LABEL, img_obj=masked, count=index)
+        
 
     p_log.append(f'{obj["ID"]}.jpg' )
     json.dump(p_log, open('processed_log.json', 'w+'), indent=2)
     
-def process_by_id(ID = "", p_log={}, json_objs={}):
+def process_by_id(ID = "", p_log={}, json_objs=[]):
     if(ID == ""): return
     p_log, json_objs = process_overhead()  
     for index, obj in enumerate(json_objs):
@@ -82,9 +81,11 @@ def process_by_id(ID = "", p_log={}, json_objs={}):
             process(index, p_log=p_log, json_objs=json_objs)
 
 def process_all():
-    p_log, json_objs = process_overhead()  
+    p_log, f_log, json_objs = process_overhead()  
+   
     for index, obj in enumerate(json_objs):
-        process(index, p_log=p_log)
+        process(obj, p_log=p_log, f_log= f_log)
+    
     
 def not_processed():
     not_processed = open('not_processed', 'r+')
@@ -93,8 +94,4 @@ def not_processed():
     for id in np_json:
         process_by_id(ID=id, p_log=p_log, json_objs=json_objs)
 
-def main():
-    process_all()
 
-if __name__ == '__main__':
-    main()
