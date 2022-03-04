@@ -11,9 +11,10 @@ def download_json_from_labelbox():
     '''
     json_file_name = 'labels.json'
     if(os.path.exists(os.path.join(os.getcwd(), json_file_name))):
-        print(f'Downloaded labels already; return')
-        return json_file_name
-    LB_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJja3l1aXo5bDVoZ291MHo5MTZwdzgzcHRnIiwib3JnYW5pemF0aW9uSWQiOiJjazdtNWVrZXh4aGFkMDg2OG9nNmVxaHFyIiwiYXBpS2V5SWQiOiJjbDBjcGcwa3EwcWJjMHo1ZmdyMG5lb2s5Iiwic2VjcmV0IjoiYmE0OWRmNTdjNGFkNWUxNGEwZGYzOWNjOTQxNTIxMmEiLCJpYXQiOjE2NDY0MTU3NzcsImV4cCI6MjI3NzU2Nzc3N30.a709JWCGMJZdCScG-X6ilzZ3Wl6BQ5ZGhhkv3V4UglU"
+        if(json.load(open(json_file_name)) != []):
+            print(f'SDK: Already downloaded labels; return')
+            return json_file_name
+    LB_API_KEY = ""
     # Create Labelbox client
     lb = labelbox.Client(api_key=LB_API_KEY)
     # Get project by ID
